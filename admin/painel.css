@@ -1,0 +1,115 @@
+/* ==========================================================
+   PÁGINA /admin — escolher os jogos exibidos no site
+   ========================================================== */
+.painel-body {
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.painel-top {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 66px; padding: 12px clamp(16px, 4vw, 40px);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.painel-top-actions { display: flex; align-items: center; gap: 10px; }
+.painel-who { color: var(--muted); font-size: .82rem; font-weight: 600; }
+.painel-who::before { content: "● "; color: #72b84e; font-size: .7rem; vertical-align: 2px; }
+
+.painel {
+  width: 100%; max-width: 760px; margin: 0 auto;
+  padding: clamp(20px, 4vw, 40px) 18px 60px;
+}
+
+/* ---------- Login ---------- */
+.login-card {
+  display: grid; gap: 6px; margin-top: clamp(20px, 8vh, 64px); padding: clamp(22px, 4vw, 34px);
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--surface); box-shadow: var(--shadow);
+  animation: fade-up .5s var(--ease) both;
+}
+.login-brand { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.login-brand .brand-mark { width: 40px; height: 40px; flex-basis: 40px; font-size: 22px; }
+.login-card h1 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem); margin-bottom: 6px; }
+.login-text { color: var(--muted); font-size: .9rem; margin-bottom: 14px; }
+.login-card form { display: grid; gap: 13px; }
+.login-card .field-box { min-height: 48px; }
+#login-error:not(:empty) { color: var(--danger); }
+
+/* ---------- Painel de jogos ---------- */
+.painel-head h1 { font-size: clamp(1.6rem, 1.3rem + 1.6vw, 2.2rem); }
+.painel-text { color: var(--muted); font-size: .9rem; margin-top: 8px; max-width: 60ch; }
+.toolbar {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px;
+  margin: 22px 0 14px; padding: 15px 16px;
+  border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-1);
+}
+.date-field { min-width: 200px; }
+.date-field input {
+  width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  background: var(--surface-2); color: var(--ink); outline: 0; font: inherit;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.date-field input:focus { border-color: var(--green-line); box-shadow: 0 0 0 3px var(--green-soft); }
+.toolbar-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.summary { color: var(--muted); font-size: .85rem; margin: 0 2px 12px; }
+
+.games { display: grid; gap: 10px; }
+.game-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 16px;
+  border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface);
+  box-shadow: var(--shadow-1);
+  transition: border-color .2s ease, transform .25s var(--ease-bounce), box-shadow .25s ease, opacity .25s ease;
+  animation: fade-up .4s var(--ease) both;
+}
+.game-row:hover { transform: translateY(-2px); border-color: var(--green-line); box-shadow: var(--shadow); }
+.game-row:not(.on) { opacity: .82; }
+.game-time {
+  display: grid; place-items: center; min-width: 62px; padding: 8px 6px; border-radius: 10px;
+  color: var(--green); background: var(--green-soft); font: 700 .9rem "Space Grotesk", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.game-teams { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+.game-teams .team { display: inline-flex; align-items: center; gap: 7px; font-size: .9rem; font-weight: 600; }
+.game-teams .team img { width: 26px; height: 26px; object-fit: contain; }
+.game-teams .vs { color: var(--subtle); font: 600 .72rem "Space Grotesk", sans-serif; }
+.game-teams .game-meta { width: 100%; color: var(--subtle); font-size: .74rem; }
+.game-row .switch { margin-left: auto; }
+
+/* Interruptor "No site" (mesmo estilo do painel do site) */
+.admin-toggle { display: inline-flex; align-items: center; gap: 9px; cursor: pointer; user-select: none; }
+.admin-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.admin-toggle .track {
+  position: relative; width: 44px; height: 25px; border-radius: 13px;
+  background: var(--surface-3); box-shadow: inset 0 1px 3px rgba(21, 32, 25, .18);
+  transition: background-color .25s ease;
+}
+.admin-toggle .track::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 19px; height: 19px; border-radius: 50%;
+  background: #fff; box-shadow: 0 2px 5px rgba(21, 32, 25, .25);
+  transition: transform .3s var(--ease-bounce);
+}
+.admin-toggle input:checked + .track { background: linear-gradient(135deg, #2c9a63, #1d7a4c); }
+.admin-toggle input:checked + .track::after { transform: translateX(19px); }
+.admin-toggle input:focus-visible + .track { outline: 2px solid var(--green-line); outline-offset: 2px; }
+.admin-toggle .toggle-label { color: var(--muted); font-size: .74rem; font-weight: 700; min-width: 52px; }
+.admin-toggle input:checked ~ .toggle-label { color: var(--green); }
+.admin-toggle input:disabled + .track { opacity: .5; }
+
+.status-line { min-height: 1.4em; margin-top: 14px; color: var(--green); font-size: .86rem; font-weight: 600; }
+.status-line:empty { color: transparent; }
+
+.empty {
+  display: grid; justify-items: center; gap: 6px; padding: 40px 20px; text-align: center;
+  border: 1px dashed var(--line-strong); border-radius: var(--radius-md); color: var(--muted);
+  background: var(--surface); font-size: .9rem;
+}
+
+@media (max-width: 560px) {
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar-buttons { justify-content: space-between; }
+  .game-row .switch { margin-left: 0; width: 100%; justify-content: flex-end; }
+}

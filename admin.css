@@ -1,0 +1,259 @@
+/* ==========================================================
+   PAINEL ADMINISTRATIVO — v3
+   ========================================================== */
+.nav-label-admin { margin-top: 24px; }
+
+/* ---------- Cabeçalho ---------- */
+.admin-page-header {
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: clamp(22px, 3vw, 32px); margin-bottom: 20px; overflow: hidden;
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  color: var(--sidebar-ink);
+  background: linear-gradient(125deg, var(--sidebar) 0%, var(--sidebar-2) 70%, #245238 100%);
+  box-shadow: var(--shadow);
+  isolation: isolate;
+}
+.admin-page-header::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(420px 190px at 88% -18%, rgba(217, 251, 100, .17), transparent 60%);
+  pointer-events: none;
+}
+.admin-page-header::after {
+  content: ""; position: absolute; right: 34px; top: -72px; width: 210px; height: 210px; z-index: -1;
+  border: 1px dashed rgba(236, 243, 236, .2); border-radius: 50%;
+  animation: admin-slow-spin 40s linear infinite; pointer-events: none;
+}
+@keyframes admin-slow-spin { to { transform: rotate(360deg); } }
+.admin-page-header h1 { font-size: clamp(1.9rem, 1.4rem + 1.8vw, 2.7rem); }
+.admin-page-header .eyebrow { color: var(--sidebar-muted); }
+.admin-intro { margin-top: 10px; color: var(--sidebar-muted); font-size: .9rem; max-width: 56ch; }
+.admin-intro strong { color: var(--lime); }
+.admin-mode { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid rgba(236, 243, 236, .22); border-radius: 8px; color: var(--sidebar-muted); background: rgba(255, 255, 255, .06); backdrop-filter: blur(6px); font-size: .66rem; font-weight: 700; letter-spacing: .07em; }
+.admin-mode span { width: 7px; height: 7px; border-radius: 50%; background: #8fdc6f; animation: ping 2s infinite; }
+
+/* ---------- Atalhos ---------- */
+.admin-quick-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+.admin-quick-link { display: flex; align-items: center; gap: 11px; min-width: 0; min-height: 58px; padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius-md); color: var(--ink-soft); background: var(--surface); font: inherit; font-size: .8rem; font-weight: 700; text-align: left; cursor: pointer; box-shadow: var(--shadow-1); transition: border-color .2s ease, transform .25s var(--ease-bounce), box-shadow .25s ease; }
+.admin-quick-link:hover { transform: translateY(-3px); border-color: var(--green-line); box-shadow: var(--shadow); }
+.admin-quick-link:focus-visible { outline: 2px solid var(--green-line); outline-offset: 2px; }
+.admin-quick-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 10px; color: var(--green); background: var(--green-soft); font-size: 1rem; transition: transform .3s var(--ease-bounce); }
+.admin-quick-link:hover .admin-quick-icon { transform: scale(1.1) rotate(-4deg); }
+.admin-quick-link > span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-quick-link strong { margin-left: auto; color: var(--green); font: 600 1.05rem "Space Grotesk", sans-serif; font-variant-numeric: tabular-nums; }
+.admin-quick-arrow { color: var(--subtle); font-size: 1rem; transition: transform .25s var(--ease); }
+.admin-quick-link:hover .admin-quick-arrow { transform: translateX(3px); }
+
+/* ---------- Estatísticas ---------- */
+.admin-stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+.admin-stat-card {
+  display: flex; align-items: center; gap: 14px; min-height: 92px; padding: 17px;
+  border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface);
+  box-shadow: var(--shadow-1); overflow: hidden; position: relative;
+  transition: border-color .2s ease, transform .25s var(--ease-bounce), box-shadow .25s ease;
+}
+.admin-stat-card::before {
+  content: ""; position: absolute; right: -20px; bottom: -20px; width: 84px; height: 84px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 251, 100, .14), transparent 65%);
+  transition: transform .4s var(--ease);
+}
+.admin-stat-card:hover { transform: translateY(-3px); border-color: var(--green-line); box-shadow: var(--shadow); }
+.admin-stat-card:hover::before { transform: scale(1.5); }
+.admin-stat-icon { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border-radius: 12px; color: var(--green); background: var(--green-soft); font-size: 1.05rem; }
+.admin-stat-card div { display: grid; gap: 3px; }
+.admin-stat-card small { color: var(--subtle); font-size: .61rem; font-weight: 700; letter-spacing: .09em; }
+.admin-stat-card strong { font: 600 1.5rem/1.1 "Space Grotesk", sans-serif; font-variant-numeric: tabular-nums; }
+
+/* ---------- Painéis ---------- */
+.admin-panel { padding: clamp(17px, 2.4vw, 26px); margin-top: 20px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-1); }
+.admin-panel-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.admin-panel-heading h2 { margin-bottom: 5px; }
+.admin-panel-heading > div > p:last-child { color: var(--muted); font-size: .82rem; }
+.admin-tools { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 9px; }
+.admin-add-button { min-height: 44px; padding-inline: 16px; white-space: nowrap; font-size: .84rem; }
+.admin-add-button > span { font-size: 1.15rem; }
+
+/* ---------- Filtros ---------- */
+.admin-game-filters { display: grid; grid-template-columns: 1fr auto auto; align-items: end; gap: 10px; margin-bottom: 16px; }
+.admin-search { display: grid; gap: 5px; }
+.admin-search span { color: var(--ink-soft); font-size: .72rem; font-weight: 700; }
+.admin-search input {
+  width: 100%; min-height: 44px; padding: 0 13px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  background: var(--surface-2); color: var(--ink); outline: 0; font-size: .9rem;
+  transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.admin-search input:focus { border-color: var(--green-line); background: var(--surface); box-shadow: 0 0 0 3px var(--green-soft); }
+.admin-search input::-webkit-search-cancel-button { cursor: pointer; }
+.admin-filter { display: grid; gap: 5px; }
+.admin-filter span { color: var(--ink-soft); font-size: .72rem; font-weight: 700; }
+.admin-filter select {
+  min-height: 44px; padding: 0 11px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  background: var(--surface-2); color: var(--ink); font: inherit; font-size: .9rem;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.admin-filter select:focus { outline: 0; border-color: var(--green-line); box-shadow: 0 0 0 3px var(--green-soft); }
+.admin-search-inline { min-width: 190px; }
+.admin-search-inline input { min-height: 44px; }
+.admin-game-count { align-self: center; justify-self: end; margin: 0 4px 12px 0; color: var(--subtle); font-size: .78rem; }
+
+/* ---------- Cartões de jogo ---------- */
+.admin-game-list { display: grid; gap: 12px; }
+.admin-game-card {
+  overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--bg-tint);
+  transition: border-color .2s ease, box-shadow .25s ease;
+}
+.admin-game-card:hover { border-color: var(--line-strong); box-shadow: var(--shadow-1); }
+.admin-game-card.open { border-color: var(--green-line); box-shadow: var(--shadow); background: var(--surface); }
+.admin-game-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; background: var(--surface); }
+.admin-game-card.open .admin-game-card-head { border-bottom: 1px solid var(--line); }
+.admin-game-matchup { display: flex; min-width: 0; align-items: center; gap: 8px; }
+.admin-game-matchup strong { font-size: .92rem; white-space: nowrap; }
+.admin-vs { color: var(--subtle); font: 600 .75rem "Space Grotesk", sans-serif; }
+.admin-game-head-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 7px; color: var(--muted); font-size: .78rem; }
+.admin-status-chip { padding: 4px 9px; border-radius: 7px; font-size: .64rem; font-weight: 700; letter-spacing: .05em; white-space: nowrap; }
+.status-scheduled { color: var(--muted); background: var(--surface-2); }
+.status-partial { color: var(--warn-ink); background: var(--warn-bg); }
+.status-finished { color: #fff; background: linear-gradient(135deg, #2c9a63, #1d7a4c); }
+.admin-live-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 7px; color: var(--live); background: color-mix(in srgb, var(--live) 12%, transparent); font-size: .64rem; font-weight: 800; }
+.admin-live-chip i { width: 6px; height: 6px; border-radius: 50%; background: var(--live); animation: ping 1.4s infinite; }
+
+.admin-head-actions { display: flex; align-items: center; gap: 9px; margin-left: auto; }
+
+/* Interruptor "No site" */
+.admin-toggle { display: inline-flex; align-items: center; gap: 9px; cursor: pointer; user-select: none; }
+.admin-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.admin-toggle .track {
+  position: relative; width: 44px; height: 25px; border-radius: 13px;
+  background: var(--surface-3); box-shadow: inset 0 1px 3px rgba(21, 32, 25, .18);
+  transition: background-color .25s ease;
+}
+.admin-toggle .track::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 19px; height: 19px; border-radius: 50%;
+  background: #fff; box-shadow: 0 2px 5px rgba(21, 32, 25, .25);
+  transition: transform .3s var(--ease-bounce);
+}
+.admin-toggle input:checked + .track { background: linear-gradient(135deg, #2c9a63, #1d7a4c); }
+.admin-toggle input:checked + .track::after { transform: translateX(19px); }
+.admin-toggle input:focus-visible + .track { outline: 2px solid var(--green-line); outline-offset: 2px; }
+.admin-toggle .toggle-label { color: var(--muted); font-size: .74rem; font-weight: 700; min-width: 52px; }
+.admin-toggle input:checked ~ .toggle-label { color: var(--green); }
+
+/* Botões-ícone do cabeçalho */
+.admin-icon-btn {
+  display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--line-strong);
+  border-radius: 9px; background: var(--surface); color: var(--muted); font-size: .95rem;
+  transition: color .2s ease, border-color .2s ease, transform .2s var(--ease-bounce), background-color .2s ease;
+}
+.admin-icon-btn:hover { color: var(--green); border-color: var(--green-line); transform: translateY(-2px); }
+.admin-icon-btn:active { transform: scale(.92); }
+.admin-icon-btn.danger:hover { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+.admin-icon-btn[aria-expanded="true"] { color: var(--green); border-color: var(--green-line); background: var(--green-soft); }
+
+/* Formulário expansível */
+.admin-game-formwrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .38s var(--ease); }
+.admin-game-card.open .admin-game-formwrap { grid-template-rows: 1fr; }
+.admin-game-form { overflow: hidden; min-height: 0; }
+.admin-form-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 11px;
+  padding: 16px; border-top: 1px solid var(--line);
+}
+.admin-field { display: grid; gap: 5px; min-width: 0; }
+.admin-field span, .admin-field legend { color: var(--ink-soft); font-size: .7rem; font-weight: 700; padding: 0; }
+.admin-field input, .admin-field select {
+  width: 100%; min-height: 42px; padding: 0 11px; border: 1px solid var(--line-strong); border-radius: 9px;
+  background: var(--surface); color: var(--ink); outline: 0; font: inherit; font-size: .88rem;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.admin-field input:focus, .admin-field select:focus { border-color: var(--green-line); box-shadow: 0 0 0 3px var(--green-soft); }
+.admin-field input:disabled { color: var(--subtle); background: var(--surface-2); cursor: not-allowed; }
+.admin-score-field { border: 0; margin: 0; display: grid; gap: 5px; }
+.admin-score-inputs { display: flex; align-items: center; gap: 8px; }
+.admin-score-inputs input { text-align: center; font: 600 1rem "Space Grotesk", sans-serif; }
+.admin-score-inputs > span { color: var(--subtle); font-weight: 700; }
+.admin-check-field { flex-direction: row; align-items: center; gap: 9px; grid-auto-flow: column; justify-content: start; align-self: end; padding-bottom: 8px; }
+.admin-check-field input { width: 17px; height: 17px; min-height: 0; accent-color: var(--green); cursor: pointer; }
+.admin-check-field span { font-size: .78rem; }
+.admin-field-wide { grid-column: span 2; }
+.admin-game-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 0 16px 16px; color: var(--subtle); font-size: .78rem; }
+.admin-game-actions-hint { display: inline-flex; align-items: center; gap: 7px; }
+.admin-save-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; position: relative;
+  min-height: 42px; padding: 0 18px; border: 0; border-radius: 10px; white-space: nowrap;
+  color: var(--lime-ink); background: linear-gradient(135deg, var(--lime), var(--lime-hover));
+  font-size: .84rem; font-weight: 700; box-shadow: 0 5px 14px rgba(178, 222, 62, .28);
+  transition: transform .25s var(--ease-bounce), box-shadow .25s ease, color .2s ease;
+  overflow: hidden;
+}
+.admin-save-button:hover { transform: translateY(-2px); box-shadow: 0 9px 20px rgba(178, 222, 62, .4); }
+.admin-save-button:active { transform: scale(.97); }
+.admin-save-button.loading { color: transparent; pointer-events: none; }
+.admin-delete-button {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 42px; padding: 0 15px;
+  border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface);
+  color: var(--muted); font-size: .82rem; font-weight: 700;
+  transition: color .2s ease, border-color .2s ease, background-color .2s ease, transform .2s var(--ease-bounce);
+}
+.admin-delete-button:hover { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); transform: translateY(-2px); }
+
+/* ---------- Tabelas ---------- */
+.admin-bets-heading { align-items: flex-end; }
+.admin-table-wrap { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; background: var(--surface); }
+.admin-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+.admin-table th {
+  padding: 12px 14px; text-align: left; color: var(--subtle); background: var(--surface-2);
+  font-size: .66rem; font-weight: 700; letter-spacing: .09em; white-space: nowrap;
+}
+.admin-table td { padding: 12px 14px; border-top: 1px solid var(--line); vertical-align: middle; }
+.admin-table tbody tr { transition: background-color .15s ease; animation: fade-up .35s var(--ease) both; }
+.admin-table tbody tr:hover { background: color-mix(in srgb, var(--green-soft) 55%, transparent); }
+.admin-participant-name { display: inline-flex; align-items: center; gap: 8px; font-size: .88rem; }
+.admin-participant-name .mini-avatar {
+  display: grid; width: 28px; height: 28px; flex: 0 0 28px; place-items: center; border-radius: 50%;
+  color: var(--lime-ink); background: linear-gradient(135deg, var(--lime), #b8e94e);
+  font: 700 .72rem "Space Grotesk", sans-serif;
+}
+.admin-table td small { display: block; color: var(--muted); font-size: .74rem; margin-top: 2px; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-odd-value { color: var(--green); font: 700 .95rem "Space Grotesk", sans-serif; }
+.admin-bet-status { display: inline-block; padding: 5px 10px; border-radius: 7px; font-size: .66rem; font-weight: 700; letter-spacing: .05em; white-space: nowrap; }
+.status-bet-won { color: #fff; background: linear-gradient(135deg, #2c9a63, #1d7a4c); }
+.status-bet-lost { color: #fff; background: linear-gradient(135deg, #d9564a, #b83e34); }
+.status-bet-waiting { color: var(--warn-ink); background: var(--warn-bg); }
+.status-bet-pending { color: var(--muted); background: var(--surface-2); }
+.admin-table-scroll-hint { display: none; }
+
+/* ---------- Vazio / rodapé ---------- */
+.admin-empty { display: grid; justify-items: center; gap: 6px; padding: 42px 20px; text-align: center; color: var(--muted); }
+.admin-empty > span { display: grid; width: 46px; height: 46px; place-items: center; margin-bottom: 6px; border-radius: 50%; color: var(--green); background: var(--green-soft); font-size: 1.3rem; }
+.admin-empty strong { color: var(--ink-soft); font-size: .95rem; }
+.admin-empty p { max-width: 46ch; font-size: .84rem; }
+.admin-disclaimer { margin-top: 22px; color: var(--subtle); font-size: .76rem; text-align: center; }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 1100px) {
+  .admin-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-field-wide { grid-column: span 2; }
+  .admin-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-game-filters { grid-template-columns: 1fr 1fr; }
+  .admin-game-count { grid-column: 1 / -1; justify-self: start; margin: 0; }
+}
+@media (max-width: 860px) {
+  .admin-page-header { flex-direction: column; align-items: flex-start; }
+  .admin-quick-links { grid-template-columns: 1fr; }
+  .admin-game-filters { grid-template-columns: 1fr; }
+  .admin-panel-heading { flex-direction: column; align-items: flex-start; }
+  .admin-tools { width: 100%; }
+  .admin-search-inline { flex: 1; min-width: 0; }
+  .admin-tools .admin-filter { flex: 1; min-width: 0; }
+  .admin-table-wrap { overflow-x: auto; }
+  .admin-table { min-width: 640px; }
+}
+@media (max-width: 560px) {
+  .admin-form-grid { grid-template-columns: 1fr; }
+  .admin-field-wide { grid-column: span 1; }
+  .admin-stat-grid { grid-template-columns: 1fr; }
+  .admin-stat-card { min-height: 78px; }
+}
+
+/* Status do novo modelo de palpite (v4) */
+.status-bet-exact { color: #fff; background: linear-gradient(135deg, #2c9a63, #1d7a4c); }
+.status-bet-outcome { color: #fff; background: linear-gradient(135deg, #e0a63a, #c07f1f); }
+.status-bet-legacy { color: var(--muted); background: var(--surface-2); }

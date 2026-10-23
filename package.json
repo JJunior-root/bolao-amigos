@@ -1,0 +1,16 @@
+{
+  "name": "bolao-amigo",
+  "version": "4.0.0",
+  "description": "Bolão amigo: palpites de placar exato e artilheiros, com banco de dados, ranking e painel administrativo",
+  "private": true,
+  "main": "server/server.js",
+  "scripts": {
+    "dev": "node server/server.js",
+    "start": "node server/server.js",
+    "test": "node testes/teste_ranking.mjs && node testes/teste_live.mjs",
+    "test:api": "node testes/teste_api.mjs"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#14251f" />
+  <title>Painel do administrador — Bolão amigo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2314251f'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='34' font-weight='900' text-anchor='middle' fill='%23d7fa72'%3EB%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="painel.css" />
+  <script src="../js/data.js" defer></script>
+  <script src="painel.js" defer></script>
+</head>
+<body class="painel-body">
+  <div class="bg-glow" aria-hidden="true"><i class="glow glow-a"></i><i class="glow glow-b"></i></div>
+
+  <header class="painel-top">
+    <a class="brand" href="/" aria-label="Voltar ao site"><span class="brand-mark" aria-hidden="true">B</span><span class="brand-name">bolão amigo<span>.</span></span></a>
+    <div class="painel-top-actions">
+      <span class="painel-who" id="who" hidden></span>
+      <button class="btn-ghost btn-small" id="logout" type="button" hidden>Sair</button>
+    </div>
+  </header>
+
+  <main class="painel">
+    <!-- Login -->
+    <section id="login-view" class="login-card" hidden>
+      <div class="login-brand" aria-hidden="true">
+        <span class="brand-mark">B</span>
+        <p class="eyebrow"><span class="eyebrow-line"></span> ÁREA RESTRITA</p>
+      </div>
+      <h1>Entrar como administrador</h1>
+      <p class="login-text">Use a conta de administrador para escolher os jogos que aparecem no site.</p>
+      <form id="login-form" novalidate>
+        <label class="field">
+          <span>E-mail</span>
+          <span class="field-box">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" /><path d="m3 8 9 6 9-6" /></svg>
+            <input id="login-email" type="email" autocomplete="username" required placeholder="admin@exemplo.com" />
+          </span>
+        </label>
+        <label class="field">
+          <span>Senha</span>
+          <span class="field-box">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="3" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>
+            <input id="login-password" type="password" autocomplete="current-password" required placeholder="Sua senha" />
+            <button class="pwd-toggle" id="login-pwd-toggle" type="button" aria-label="Mostrar senha" aria-pressed="false">
+              <svg class="pwd-eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" /><circle cx="12" cy="12" r="2.6" /></svg>
+              <svg class="pwd-eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5c2 0 3.7.6 5.2 1.4M22 12s-3.6 6.5-10 6.5c-2 0-3.7-.6-5.2-1.4" /><path d="m4 20 16-16" /></svg>
+            </button>
+          </span>
+        </label>
+        <p class="form-error" id="login-error" role="alert"></p>
+        <button class="btn-primary btn-block" id="login-submit" type="submit"><span class="btn-label">Entrar</span> <span aria-hidden="true">→</span></button>
+      </form>
+    </section>
+
+    <!-- Escolha dos jogos -->
+    <section id="panel-view" hidden>
+      <div class="painel-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> JOGOS DO DIA</p>
+          <h1>Escolher os jogos</h1>
+          <p class="painel-text">Marque os jogos que aparecem para os usuários. Desmarcados, eles ficam ocultos no site, mas continuam salvos.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <label class="field date-field"><span>Data</span><input id="day" type="date" /></label>
+        <div class="toolbar-buttons">
+          <button class="btn-ghost btn-small" id="show-all-day" type="button">Exibir todos do dia</button>
+          <button class="btn-ghost btn-small" id="hide-all-day" type="button">Ocultar todos do dia</button>
+        </div>
+      </div>
+
+      <p class="summary" id="summary"></p>
+      <div class="games" id="games"></div>
+      <p class="status-line" id="status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+</body>
+</html>

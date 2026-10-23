@@ -1,0 +1,155 @@
+BOLÃO AMIGO — palpites de futebol com banco de dados, ao vivo e painel administrativo
+=====================================================================================
+VERSÃO 4 — placar exato, artilheiros e só jogos futuros
+
+O QUE TEM AQUI
+- server/        servidor (Node.js) com API, banco de dados e regras de negócio
+- data/          banco SQLite (esta cópia já vem inicializada com a conta de administrador; não envie para o GitHub)
+- index.html     site (abre pelo servidor, não funciona direto com duplo clique)
+- js/, styles.css, admin.css, assets/, admin/   interface
+- testes/        testes automáticos da API e do navegador
+
+REQUISITOS
+- Node.js 22.13 ou mais novo (https://nodejs.org). Não precisa instalar nenhum pacote:
+  o banco (SQLite) e a criptografia já vêm no Node.
+
+COMO RODAR
+1. Abra um terminal na pasta do projeto.
+2. Defina a senha do administrador e inicie o servidor:
+
+   Linux / macOS:
+     ADMIN_PASSWORD="uma-senha-forte" npm start
+
+   Windows (PowerShell):
+     $env:ADMIN_PASSWORD="uma-senha-forte"; npm start
+
+   Windows (Prompt de Comando):
+     set ADMIN_PASSWORD=uma-senha-forte && npm start
+
+3. Abra http://localhost:3000 no navegador.
+
+Se ADMIN_PASSWORD não for definida na primeira execução, o servidor cria o administrador
+com uma senha aleatória e a mostra UMA vez no terminal. Anote e troque depois.
+
+CONTA DE ADMINISTRADOR
+- E-mail de login padrão: chianca@gmail.com (pode ser trocado com a variável ADMIN_EMAIL).
+- Nome exibido: Chianca (pode ser trocado com a variável ADMIN_NAME).
+- Entre pela mesma tela de "Entrar" do site (ou pela rota /admin).
+- O menu "Painel administrativo" só aparece para ela.
+- Ela não pode ser criada pelo cadastro: o servidor sempre cria contas comuns.
+- Para trocar a senha: mude ADMIN_PASSWORD e reinicie o servidor.
+
+NOVIDADES DA VERSÃO 4
+- Só jogos que vão acontecer: a lista do site mostra apenas partidas com kickoff no futuro.
+  Jogos que já passaram somem da lista (o admin continua vendo todos para lançar resultados).
+- Rodada sempre futura: ao iniciar o servidor, jogos antigos de demonstração (sem placar e
+  sem palpites) são removidos e, se não restar nenhum jogo à frente, uma nova rodada é criada
+  começando no dia seguinte quando já é tarde para palpitar (após as 16h de Brasília).
+- Palpite de PLACAR EXATO: em vez de escolher "time + gols", o jogador digita o placar
+  completo do jogo (mandante x visitante), ex.: Vasco 3 x 0 Vitória.
+- Novos pontos:
+  · 3 pontos — acertou o placar exato;
+  · 1 ponto — acertou o resultado (vencedor ou empate), mas não o placar;
+  · 0 ponto — errou o resultado (empate inesperado ou derrota do time palpitado).
+- ARTILHEIROS: logo depois do placar, o jogador escolhe 1 ou mais jogadores (até 6,
+  dos dois times). Cada escolhido que marcar gol — mesmo que seja só 1 — vale +1 ponto.
+- O palpite pode ser ajustado até o fechamento da janela (2h antes do jogo): basta
+  abrir a partida de novo e reenviar.
+- Cotações (odds) e multiplicador de sequência foram removidos; a pontuação é fixa.
+- Ranking atualizado com a nova pontuação (placares exatos, resultados e artilheiros).
+- Painel do admin e CSV de palpites mostram o placar palpitado, os artilheiros e os pontos.
+
+NOVIDADES DA VERSÃO 3
+- Visual renovado: brilhos ambiente, hero com gradiente, cartões com profundidade,
+  tema escuro aprimorado e favicon próprio.
+- Fluidez: transição de tela pela View Transitions API (onde o navegador suporta),
+  contagem regressiva ao vivo em cada jogo ("Fecha em 02:10:20"), placeholders
+  (skeletons) enquanto os dados carregam, números que "sobem" suavemente,
+  revelação ao rolar e respeito ao prefers-reduced-motion.
+- Placar ao vivo: os jogos sincronizados com o fornecedor exibem selo "AO VIVO"
+  com minuto e placar parcial nos cartões e no painel do admin.
+- Criar conta / entrar: diálogo em duas colunas com painel de marca, medidor de
+  força da senha (fraca → forte), botão mostrar/ocultar senha, aviso de Caps Lock,
+  verificação de e-mail em tempo real e botão com estado "enviando".
+- Escolha do time fixo com busca por nome do clube.
+- Painel administrativo ampliado:
+  · cartões de jogo expansíveis (cabeçalho compacto + formulário ao clicar em editar);
+  · interruptor "No site" em cada jogo (liga/desliga sem recarregar);
+  · exclusão de partidas sem palpites, com diálogo de confirmação;
+  · busca em jogos, palpites e usuários;
+  · exportação dos palpites e dos usuários em CSV (abre no Excel);
+  · botões com estado "salvando" e tabelas com destaque por situação.
+- Toasts com ícone, tipo (sucesso/erro/informação) e barra de tempo.
+
+ROTA DO ADMINISTRADOR: /admin
+- Página própria para o admin escolher os jogos do dia (endereço: seu-site/admin).
+- Entre com a conta de administrador. Usuários comuns são recusados.
+- Escolha a data, depois ligue ou desligue cada jogo com a chave "No site".
+- Os botões "Exibir todos do dia" e "Ocultar todos do dia" alteram todos os jogos da data.
+- Quem está no site vê a mudança ao voltar para a aba ou em até 30 segundos.
+
+JOGOS DO DIA (SOMENTE O ADMIN)
+- No painel administrativo, cada jogo tem o interruptor "No site".
+- Marcado: aparece para todos e recebe palpites.
+- Desmarcado: some para visitantes e usuários; o admin continua vendo e editando.
+- Jogos criados pelo painel começam desmarcados, para você escolher antes de liberar.
+- Jogos sem nenhum palpite podem ser excluídos (botão de lixeira + confirmação).
+- Com palpites registrados, a partida é preservada para manter o histórico.
+
+REGRAS PRINCIPAIS
+- Um palpite por usuário em cada jogo (editável até o fechamento da janela).
+- Para palpitar é preciso estar logado.
+- No primeiro acesso, escolha um time fixo entre os 20 clubes; usuários logados ficam
+  vinculados a essa escolha e veem jogos que envolvem esse time — e que ainda vão acontecer.
+- Os palpites fecham duas horas antes do horário da partida, no horário de Brasília.
+  O servidor também bloqueia envios feitos após o fechamento.
+- O palpite é o placar completo (ex.: 3 x 0) + 1 a 6 artilheiros de qualquer um dos times.
+- Depois do primeiro palpite de uma partida, o admin não pode mais trocar os times.
+- O vencedor precisa corresponder ao placar informado.
+- Depois de 10 erros de senha em 15 minutos, o login do mesmo e-mail fica bloqueado por 15 minutos.
+
+PONTUAÇÃO
+- Placar exato: 3 pontos (ex.: palpitou Vasco 3x0 Vitória e o jogo terminou 3x0).
+- Resultado certo, placar errado: 1 ponto (palpitou vitória do Vasco e o Vasco ganhou;
+  vale também para empate palpitado com placar diferente).
+- Errou o resultado (0 x 0 inesperado, derrota do time palpitado...): 0 ponto.
+- Artilheiros: +1 ponto por cada jogador escolhido que marcar gol (1 ou mais gols
+  do jogador valem o mesmo +1). Vale mesmo se o resultado foi errado.
+
+RANKING
+- Aba "Ranking" (menu e barra do celular). Mostra todos os jogadores com time fixo,
+  em ordem de pontos, com destaque para os três primeiros.
+- Critérios de desempate: mais placares exatos, depois mais artilheiros acertados.
+- A contagem começa no primeiro jogo ocorrido depois do cadastro do jogador.
+- Um jogo só entra no ranking depois que os marcadores dos gols do placar foram informados no painel.
+- Regras ficam em server/ranking.js (constante RULES, espelhada em js/data.js POINTS).
+  Testes: node testes/teste_ranking.mjs
+
+AO VIVO (SINCRONIZAÇÃO COM FORNECEDOR)
+- server/live.js busca os jogos num fornecedor de dados e atualiza placar ao vivo, minuto,
+  marcadores e resultado final. A rota pública GET /api/live lista os jogos em andamento.
+- Ative com: LIVE_API_URL (URL da lista de partidas do fornecedor), LIVE_API_KEY e,
+  se preciso, LIVE_API_HEADER e LIVE_POLL_SECONDS (padrão 60). Sem LIVE_API_URL, nada é sincronizado.
+- Fornecedores possíveis para o Brasileirão: Sportmonks, TheStatsAPI, SportsGameOdds.
+- parseFixtures() em server/live.js converte o JSON do fornecedor. Confira o formato real
+  antes de publicar.
+- O fornecedor não sobrescreve resultado que o admin já lançou.
+- Palpites continuam fechando 2h antes da partida. Palpite ao vivo ainda não está liberado.
+- Com a sincronização ativa, o site mostra o selo "AO VIVO" com minuto e placar parcial.
+- Testes: node testes/teste_live.mjs
+
+SEGURANÇA
+- Senhas guardadas com scrypt (com sal aleatório).
+- Sessão em cookie HttpOnly (o JavaScript da página não consegue ler).
+- Arquivos do servidor e o banco não são servidos pelo site.
+
+TESTES
+- node testes/teste_api.mjs        (roda contra servidor na porta 3300; veja o início do arquivo)
+- node testes/teste_ranking.mjs
+- node testes/teste_jogo_dia.mjs
+- node testes/teste_live.mjs
+
+PUBLICAR NA INTERNET
+- Precisa de hospedagem que rode Node.js e tenha disco persistente (VPS, Render, Railway,
+  Fly.io...). O banco SQLite fica na pasta data/.
+- Defina ADMIN_PASSWORD, COOKIE_SECURE=1 (https) e, se for usar, as variáveis LIVE_API_*.

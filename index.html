@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#14251f" />
+    <meta name="description" content="Monte palpites de futebol em um ambiente demonstrativo, sem dinheiro real." />
+    <title>Bolão amigo — palpites de futebol</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2314251f'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='34' font-weight='900' text-anchor='middle' fill='%23d7fa72'%3EB%3C/text%3E%3C/svg%3E" />
+    <script>
+      (function () {
+        var theme = null;
+        try { theme = localStorage.getItem("arquibancada-theme"); } catch (e) {}
+        if (theme !== "dark" && theme !== "light") {
+          theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="js/data.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <div class="bg-glow" aria-hidden="true"><i class="glow glow-a"></i><i class="glow glow-b"></i><i class="glow glow-c"></i></div>
+
+    <div class="app-shell">
+
+      <!-- ============ MENU LATERAL (desktop) ============ -->
+      <aside class="sidebar" aria-label="Navegação principal">
+        <a class="brand" href="#/inicio" aria-label="Bolão amigo, início">
+          <span class="brand-mark" aria-hidden="true">B</span>
+          <span class="brand-name">bolão amigo<span>.</span></span>
+        </a>
+
+        <div class="nav-label">MENU</div>
+        <nav class="main-nav">
+          <a class="nav-item" href="#/inicio" data-route="inicio"><span class="nav-icon" aria-hidden="true">◈</span><span>Início</span></a>
+          <a class="nav-item" href="#/jogos" data-route="jogos"><span class="nav-icon" aria-hidden="true">▦</span><span>Jogos</span></a>
+          <a class="nav-item" href="#/palpite" data-route="palpite"><span class="nav-icon" aria-hidden="true">✚</span><span>Palpite</span></a>
+          <a class="nav-item" href="#/ranking" data-route="ranking"><span class="nav-icon" aria-hidden="true">★</span><span>Ranking</span></a>
+          <a class="nav-item" href="#/meus-palpites" data-route="meus-palpites"><span class="nav-icon" aria-hidden="true">◷</span><span>Meus palpites</span><span class="nav-count" id="bet-count">0</span></a>
+        </nav>
+
+        <div class="nav-label nav-label-admin admin-only" hidden>GESTÃO</div>
+        <nav class="main-nav admin-only" hidden>
+          <a class="nav-item" href="#/admin" data-route="admin"><span class="nav-icon" aria-hidden="true">▤</span><span>Painel administrativo</span></a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="profile">
+            <div class="avatar" id="profile-avatar">J</div>
+            <div class="profile-copy"><strong id="profile-name">Jogador</strong><span id="profile-sub">Torcedor iniciante</span></div>
+            <button class="profile-more" id="profile-more" type="button" aria-label="Abrir conta">•••</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="content">
+        <!-- ============ TOPO ============ -->
+        <header class="topbar">
+          <a class="brand brand-mobile" href="#/inicio" aria-label="Bolão amigo, início">
+            <span class="brand-mark" aria-hidden="true">B</span>
+          </a>
+          <div class="breadcrumb"><span>PALPITES</span><span class="crumb-sep" aria-hidden="true">/</span><strong id="crumb">Início</strong></div>
+          <div class="topbar-actions">
+            <span class="demo-label"><span class="live-dot" aria-hidden="true"></span>DEMONSTRAÇÃO</span>
+            <button class="icon-button" id="theme-toggle" type="button" aria-label="Ativar tema escuro">
+              <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+              <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+            </button>
+            <button class="icon-button" id="account-button" type="button" aria-label="Criar conta ou entrar" aria-haspopup="dialog">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7" /></svg>
+            </button>
+          </div>
+        </header>
+
+        <main class="main-content" id="main">
+
+          <!-- ============ TELA: INÍCIO ============ -->
+          <section class="screen" data-screen="inicio" aria-label="Início">
+            <div class="hero">
+              <div class="hero-pitch" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="hero-copy">
+                <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> EDIÇÃO DEMONSTRATIVA · 2026</p>
+                <h1>Seu palpite.<br /><em>Seu jogo.</em></h1>
+                <p class="hero-text">Escolha seu time fixo, acompanhe os jogos dele ao vivo, palpite o placar exato e escolha os artilheiros antes do apito inicial.</p>
+                <div class="hero-actions">
+                  <button class="btn-primary" type="button" data-go="jogos">Escolher um jogo <span aria-hidden="true">→</span></button>
+                  <button class="btn-ghost" type="button" data-go="meus-palpites">Meus palpites</button>
+                </div>
+              </div>
+              <div class="hero-side" aria-hidden="true">
+                <div class="hero-stamp"><span>90</span><small>MIN</small><div class="stamp-ball">⚽</div></div>
+                <div class="hero-chip hero-chip-a"><span class="hero-chip-dot"></span>Palpites ao vivo</div>
+                <div class="hero-chip hero-chip-b">★ Ranking em tempo real</div>
+              </div>
+            </div>
+
+            <div class="stat-grid stagger">
+              <button class="stat-card stagger-item" style="--i:0" type="button" data-go="jogos"><span class="stat-icon" aria-hidden="true">▦</span><span class="stat-num" id="home-games">10</span><span class="stat-label">confrontos abertos</span></button>
+              <button class="stat-card stagger-item" style="--i:1" type="button" data-go="jogos"><span class="stat-icon" aria-hidden="true">⚔</span><span class="stat-num">20</span><span class="stat-label">clubes da Série A</span></button>
+              <button class="stat-card stagger-item" style="--i:2" type="button" data-go="meus-palpites"><span class="stat-icon" aria-hidden="true">✳</span><span class="stat-num" id="home-bets">0</span><span class="stat-label">palpites feitos</span></button>
+            </div>
+
+            <div class="steps stagger">
+              <div class="step stagger-item" style="--i:0"><span class="step-num">01</span><div><strong>Escolha seu time fixo</strong><p>Os jogos exibidos serão apenas os que envolvem esse clube — e que ainda vão acontecer.</p></div></div>
+              <div class="step stagger-item" style="--i:1"><span class="step-num">02</span><div><strong>Palpite o placar exato</strong><p>Acertou o placar: 3 pontos. Acertou só o resultado: 1 ponto. Errou: nada.</p></div></div>
+              <div class="step stagger-item" style="--i:2"><span class="step-num">03</span><div><strong>Escolha os artilheiros</strong><p>Depois do placar, marque 1 ou mais jogadores: cada um que fizer gol vale +1 ponto.</p></div></div>
+            </div>
+          </section>
+
+          <!-- ============ TELA: JOGOS ============ -->
+          <section class="screen" data-screen="jogos" aria-label="Jogos">
+            <div class="section-heading">
+              <div><p class="eyebrow">CONFRONTOS · SÉRIE A</p><h2>Jogos do seu time</h2></div>
+              <button class="text-button" type="button" id="all-matches">Ver todos <span aria-hidden="true">↓</span></button>
+            </div>
+            <div class="match-list" id="match-list" aria-label="Selecione uma partida"></div>
+
+            <div class="section-heading clubs-heading">
+              <div><p class="eyebrow">MEU TIME FIXO</p><h2>Seu clube</h2></div>
+              <span class="clubs-hint">Toque no escudo para palpitar sobre o time</span>
+            </div>
+            <div class="club-grid" id="club-grid" aria-label="Times participantes"></div>
+          </section>
+
+          <!-- ============ TELA: PALPITE ============ -->
+          <section class="screen" data-screen="palpite" aria-label="Monte seu palpite">
+            <div class="empty-state" id="palpite-empty">
+              <span class="empty-ball" aria-hidden="true">⚽</span>
+              <h2>Nenhum jogo selecionado</h2>
+              <p>Escolha uma partida para começar seu palpite.</p>
+              <button class="btn-primary" type="button" data-go="jogos">Ver os jogos <span aria-hidden="true">→</span></button>
+            </div>
+
+            <div id="palpite-body" hidden>
+              <div class="section-heading">
+                <div><p class="eyebrow">MONTE SEU PALPITE</p><h2 id="pal-title"></h2></div>
+                <span class="match-meta" id="pal-meta"></span>
+              </div>
+
+              <div class="builder-grid">
+                <div class="markets">
+                  <article class="market-card stagger-item" style="--i:0">
+                    <div class="market-title-row"><div class="market-number">01</div><div><h3>Qual vai ser o placar?</h3><p>Escolha quantos gols cada time vai marcar. Placar exato vale 3 pontos.</p></div></div>
+                    <div class="score-picker" id="score-picker"></div>
+                    <ul class="points-guide">
+                      <li><b>3 pontos</b><span>acertou o placar exato</span></li>
+                      <li><b>1 ponto</b><span>acertou o resultado, mas não o placar</span></li>
+                      <li><b>0 ponto</b><span>errou o resultado (empate ou derrota palpitada diferente)</span></li>
+                    </ul>
+                  </article>
+
+                  <article class="market-card stagger-item" style="--i:1">
+                    <div class="market-title-row"><div class="market-number">02</div><div><h3>Quem vai marcar os gols?</h3><p>Escolha 1 ou mais jogadores dos dois times. Cada artilheiro acertado vale +1 ponto.</p></div></div>
+                    <label class="player-input-wrap" for="scorer-search">
+                      <span class="player-input-avatar" aria-hidden="true">⚽</span>
+                      <input id="scorer-search" type="text" maxlength="40" placeholder="Buscar jogador no elenco" autocomplete="off" />
+                      <span class="scorer-counter" id="scorer-counter">0/6</span>
+                    </label>
+                    <div class="player-options" id="scorer-options"></div>
+                    <p class="player-input-note">Cada jogador escolhido que marcar gol — mesmo que seja só um — soma +1 ponto no seu bolão.</p>
+                  </article>
+                </div>
+
+                <aside class="slip-card" aria-label="Resumo do palpite">
+                  <div class="slip-header"><div><p class="eyebrow">SEU PALPITE</p><h3>Resumo</h3></div><span class="slip-ticket" aria-hidden="true">✳</span></div>
+                  <div class="slip-match"><span class="slip-live-dot" aria-hidden="true"></span><strong id="slip-match-name"></strong></div>
+                  <p class="bet-deadline" id="pal-deadline"></p>
+                  <p class="bet-lock-notice" id="bet-lock-notice" hidden></p>
+
+                  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+                  <p class="progress-text" id="progress-text">0 de 2 escolhas</p>
+
+                  <div class="slip-selections" id="slip-selections"></div>
+                  <div class="slip-divider"></div>
+
+                  <div class="potential-row"><span>Máximo de pontos</span><strong id="potential-points">—</strong></div>
+                  <button class="submit-bet" id="submit-bet" type="button" disabled><span class="submit-label">Fazer palpite</span> <span aria-hidden="true">→</span></button>
+                  <p class="slip-footnote">Simulação com créditos fictícios. Sem dinheiro real.</p>
+                </aside>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ TELA: MEUS PALPITES ============ -->
+          <section class="screen" data-screen="meus-palpites" aria-label="Meus palpites">
+            <div class="section-heading">
+              <div><p class="eyebrow">ACOMPANHE</p><h2>Meus palpites</h2></div>
+              <span class="bets-total" id="bets-total">0 palpites</span>
+            </div>
+            <div class="bets-list" id="bets-list"></div>
+          </section>
+
+          <!-- ============ TELA: RANKING ============ -->
+          <section class="screen" data-screen="ranking" aria-label="Ranking">
+            <div class="section-heading">
+              <div><p class="eyebrow">CLASSIFICAÇÃO</p><h2>Ranking</h2></div>
+              <span class="bets-total" id="ranking-total">0 jogos</span>
+            </div>
+            <p class="rank-rules" id="ranking-rules"></p>
+            <div class="rank-list" id="ranking-list" aria-live="polite"></div>
+          </section>
+
+          <!-- ============ TELA: ADMINISTRAÇÃO ============ -->
+          <section class="screen admin-screen" data-screen="admin" aria-label="Painel administrativo">
+            <div class="admin-page-header">
+              <div class="admin-page-copy">
+                <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> OPERAÇÃO · SÉRIE A</p>
+                <h1>Central de gestão</h1>
+                <p class="admin-intro">Olá, <strong id="admin-welcome-name">administrador</strong>. Organize os jogos, publique resultados e acompanhe os palpites recebidos.</p>
+              </div>
+              <span class="admin-mode"><span></span> AMBIENTE DE DEMONSTRAÇÃO</span>
+            </div>
+
+            <nav class="admin-quick-links" aria-label="Atalhos do painel">
+              <button type="button" class="admin-quick-link" data-admin-scroll="admin-games-panel"><span class="admin-quick-icon" aria-hidden="true">▦</span><span>Jogos e placares</span><strong id="admin-shortcut-games">0</strong><span class="admin-quick-arrow" aria-hidden="true">→</span></button>
+              <button type="button" class="admin-quick-link" data-admin-scroll="admin-bets-panel"><span class="admin-quick-icon" aria-hidden="true">✳</span><span>Palpites</span><strong id="admin-shortcut-bets">0</strong><span class="admin-quick-arrow" aria-hidden="true">→</span></button>
+              <button type="button" class="admin-quick-link" data-admin-scroll="admin-users-panel"><span class="admin-quick-icon" aria-hidden="true">♙</span><span>Participantes</span><strong id="admin-shortcut-users">0</strong><span class="admin-quick-arrow" aria-hidden="true">→</span></button>
+            </nav>
+
+            <div class="admin-stat-grid">
+              <article class="admin-stat-card"><span class="admin-stat-icon" aria-hidden="true">▦</span><div><small>JOGOS DE HOJE</small><strong id="admin-today-games">0</strong></div></article>
+              <article class="admin-stat-card"><span class="admin-stat-icon" aria-hidden="true">✳</span><div><small>PALPITES RECEBIDOS</small><strong id="admin-total-bets">0</strong></div></article>
+              <article class="admin-stat-card"><span class="admin-stat-icon" aria-hidden="true">◷</span><div><small>AGUARDANDO RESULTADO</small><strong id="admin-open-bets">0</strong></div></article>
+              <article class="admin-stat-card"><span class="admin-stat-icon" aria-hidden="true">✓</span><div><small>JOGOS FINALIZADOS</small><strong id="admin-finished-games">0</strong></div></article>
+            </div>
+
+            <section class="admin-panel" id="admin-games-panel" aria-labelledby="admin-games-title">
+              <div class="admin-panel-heading">
+                <div><p class="eyebrow">AGENDA E RESULTADOS</p><h2 id="admin-games-title">Jogos e placares</h2><p>Edite a partida, registre o placar e os marcadores, ou exclua jogos sem palpites.</p></div>
+                <button class="btn-primary admin-add-button" type="button" id="admin-add-game"><span aria-hidden="true">＋</span> Adicionar jogo</button>
+              </div>
+              <div class="admin-game-filters">
+                <label class="admin-search"><span>Buscar jogo</span><input id="admin-game-search" type="search" placeholder="Time, confronto ou data" autocomplete="off" /></label>
+                <label class="admin-filter"><span>Filtrar situação</span><select id="admin-game-filter"><option value="all">Todas as partidas</option><option value="scheduled">Agendadas</option><option value="partial">Resultado parcial</option><option value="finished">Finalizadas</option><option value="hidden">Ocultas no site</option></select></label>
+                <p class="admin-game-count" id="admin-game-count" aria-live="polite"></p>
+              </div>
+              <div class="admin-game-list" id="admin-game-list"></div>
+            </section>
+
+            <section class="admin-panel admin-bets-panel" id="admin-bets-panel" aria-labelledby="admin-bets-title">
+              <div class="admin-panel-heading admin-bets-heading">
+                <div><p class="eyebrow">PARTICIPANTES</p><h2 id="admin-bets-title">Palpites registrados</h2><p>Consulte o autor, a partida e as escolhas enviadas.</p></div>
+                <div class="admin-tools">
+                  <label class="admin-search admin-search-inline"><span>Buscar</span><input id="admin-bet-search" type="search" placeholder="Nome, e-mail ou time" autocomplete="off" /></label>
+                  <label class="admin-filter"><span>Partida</span><select id="admin-bet-filter"><option value="">Todas</option></select></label>
+                  <button class="btn-ghost btn-small" type="button" id="admin-export-bets" title="Baixar palpites em CSV"><span aria-hidden="true">⤓</span> CSV</button>
+                </div>
+              </div>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead><tr><th>PARTICIPANTE</th><th>PARTIDA</th><th>PALPITE</th><th>PONTOS</th><th>STATUS</th></tr></thead>
+                  <tbody id="admin-bets-table"></tbody>
+                </table>
+                <div class="admin-empty" id="admin-bets-empty" hidden><span>◷</span><strong>Nenhum palpite registrado</strong><p>Os palpites enviados aparecerão nesta tabela com o nome e o e-mail do participante.</p></div>
+              </div>
+            </section>
+            <section class="admin-panel" id="admin-users-panel" aria-labelledby="admin-users-title">
+              <div class="admin-panel-heading">
+                <div><p class="eyebrow">CONTAS</p><h2 id="admin-users-title">Usuários cadastrados · <span id="admin-users-total">0</span></h2><p>Quem criou conta na plataforma e quantos palpites fez.</p></div>
+                <div class="admin-tools">
+                  <label class="admin-search admin-search-inline"><span>Buscar</span><input id="admin-user-search" type="search" placeholder="Nome ou e-mail" autocomplete="off" /></label>
+                  <button class="btn-ghost btn-small" type="button" id="admin-export-users" title="Baixar usuários em CSV"><span aria-hidden="true">⤓</span> CSV</button>
+                </div>
+              </div>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead><tr><th>Nome</th><th>E-mail</th><th>Cadastro</th><th>Palpites</th></tr></thead>
+                  <tbody id="admin-users-table"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <p class="admin-disclaimer">Os dados são guardados no banco de dados do servidor. Somente a conta de administrador acessa este painel.</p>
+          </section>
+
+          <footer class="site-footer">
+            <span>BOLÃO AMIGO © 2026</span>
+            <span>Organizador: Lucas Chianca · <a class="footer-tel" href="tel:+556198392234">(61) 98392234</a></span>
+            <span>Feito para curtir o futebol. <b aria-hidden="true">⚽</b></span>
+            <span>Jogos e elencos são ilustrativos.</span>
+          </footer>
+        </main>
+      </div>
+    </div>
+
+    <!-- ============ BARRA DE ABAS (celular) ============ -->
+    <nav class="tabbar" aria-label="Navegação">
+      <a class="tab" href="#/inicio" data-route="inicio"><span aria-hidden="true">◈</span><small>Início</small></a>
+      <a class="tab" href="#/jogos" data-route="jogos"><span aria-hidden="true">▦</span><small>Jogos</small></a>
+      <a class="tab" href="#/palpite" data-route="palpite"><span aria-hidden="true">✚</span><small>Palpite</small></a>
+      <a class="tab" href="#/ranking" data-route="ranking"><span aria-hidden="true">★</span><small>Ranking</small></a>
+      <a class="tab" href="#/meus-palpites" data-route="meus-palpites"><span aria-hidden="true">◷</span><small>Palpites</small><span class="tab-count" id="tab-bet-count" data-zero="true">0</span></a>
+      <a class="tab admin-only" href="#/admin" data-route="admin" hidden><span aria-hidden="true">▤</span><small>Admin</small></a>
+    </nav>
+
+    <!-- ============ CONFIRMAÇÃO DO PALPITE ============ -->
+    <div class="success-overlay" id="success" hidden role="status" aria-live="polite">
+      <div class="success-card">
+        <svg class="check" viewBox="0 0 52 52" aria-hidden="true"><circle class="check-ring" cx="26" cy="26" r="24" /><path class="check-mark" d="M15 27 l8 8 l15 -16" /></svg>
+        <strong>Palpite feito!</strong>
+        <span>Boa sorte, torcedor.</span>
+      </div>
+      <div class="confetti" id="confetti" aria-hidden="true"></div>
+    </div>
+
+    <!-- ============ CONTA (login / cadastro) ============ -->
+    <dialog class="account-dialog" id="account-dialog" aria-labelledby="account-title">
+      <div class="auth-brand" aria-hidden="true">
+        <i class="auth-brand-pitch"></i>
+        <div class="auth-brand-copy">
+          <span class="brand-mark">B</span>
+          <strong>Bolão amigo</strong>
+          <p>Palpites de futebol entre amigos, com ranking, placar exato e jogos ao vivo.</p>
+        </div>
+        <ul class="auth-brand-list">
+          <li><span aria-hidden="true">✚</span> Um palpite por partida</li>
+          <li><span aria-hidden="true">★</span> Placar exato 3 pts · resultado 1 pt</li>
+          <li><span aria-hidden="true">⚽</span> +1 ponto por artilheiro acertado</li>
+        </ul>
+      </div>
+      <div class="dialog-inner">
+        <div class="dialog-head">
+          <div><p class="eyebrow">CONTA DEMONSTRATIVA</p><h2 id="account-title">Criar conta</h2></div>
+          <button class="icon-button" type="button" data-close aria-label="Fechar">✕</button>
+        </div>
+
+        <div class="auth-tabs" role="tablist" aria-label="Entrar ou criar conta">
+          <span class="auth-tab-glider" aria-hidden="true"></span>
+          <button class="auth-tab active" type="button" role="tab" data-auth="signup" aria-selected="true">Criar conta</button>
+          <button class="auth-tab" type="button" role="tab" data-auth="login" aria-selected="false">Entrar</button>
+        </div>
+
+        <form id="signup-form" class="signup-form" novalidate>
+          <label class="field" id="signup-name-field">
+            <span>Nome</span>
+            <span class="field-box">
+              <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7" /></svg>
+              <input id="signup-name" name="name" type="text" maxlength="40" autocomplete="name" required placeholder="Como quer ser chamado" />
+            </span>
+          </label>
+          <label class="field">
+            <span>E-mail</span>
+            <span class="field-box">
+              <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" /><path d="m3 8 9 6 9-6" /></svg>
+              <input id="signup-email" name="email" type="email" autocomplete="email" required placeholder="voce@email.com" />
+              <em class="field-check" id="email-check" aria-hidden="true"></em>
+            </span>
+          </label>
+          <label class="field">
+            <span>Senha</span>
+            <span class="field-box">
+              <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="3" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>
+              <input id="signup-password" name="password" type="password" minlength="6" autocomplete="new-password" required placeholder="Mínimo de 6 caracteres" />
+              <button class="pwd-toggle" id="pwd-toggle" type="button" aria-label="Mostrar senha" aria-pressed="false">
+                <svg class="pwd-eye" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" /><circle cx="12" cy="12" r="2.6" /></svg>
+                <svg class="pwd-eye-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5c2 0 3.7.6 5.2 1.4M22 12s-3.6 6.5-10 6.5c-2 0-3.7-.6-5.2-1.4" /><path d="m4 20 16-16" /></svg>
+              </button>
+            </span>
+            <span class="pwd-meter" id="pwd-meter" hidden aria-hidden="true"><i data-seg="0"></i><i data-seg="1"></i><i data-seg="2"></i><i data-seg="3"></i><small id="pwd-meter-label"></small></span>
+            <span class="caps-hint" id="caps-hint" hidden><b aria-hidden="true">⇪</b> Caps Lock ativado</span>
+          </label>
+          <p class="form-error" id="signup-error" role="alert"></p>
+          <p class="form-note">Seus dados ficam guardados no banco de dados do servidor. Use uma senha que você não usa em outros sites.</p>
+          <button class="btn-primary btn-block" type="submit" id="auth-submit"><span class="btn-label">Criar conta</span> <span aria-hidden="true">→</span></button>
+        </form>
+
+        <div class="account-summary" id="account-summary" hidden>
+          <div class="avatar avatar-lg" id="account-summary-avatar">J</div>
+          <div class="account-summary-copy"><strong id="account-summary-name"></strong><span id="account-summary-email"></span><span id="account-summary-team"></span><span class="role-tag" id="account-summary-role" hidden>Administrador</span></div>
+          <button class="btn-ghost" type="button" id="logout-button">Sair da conta</button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- ============ TIME FIXO ============ -->
+    <dialog class="favorite-team-dialog" id="favorite-team-dialog" aria-labelledby="favorite-team-title">
+      <div class="favorite-team-inner">
+        <p class="eyebrow">SEU CLUBE</p>
+        <h2 id="favorite-team-title">Escolha seu time fixo</h2>
+        <p>Você verá apenas os jogos que envolvem esse time. Essa escolha fica vinculada à sua conta.</p>
+        <label class="favorite-team-search" for="favorite-team-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <input id="favorite-team-search" type="search" placeholder="Buscar clube" autocomplete="off" />
+        </label>
+        <div class="favorite-team-grid" id="favorite-team-grid"></div>
+        <p class="form-error" id="favorite-team-error" role="alert"></p>
+        <button class="btn-primary btn-block" type="button" id="favorite-team-confirm" disabled>Confirmar meu time <span aria-hidden="true">→</span></button>
+      </div>
+    </dialog>
+
+    <!-- ============ CONFIRMAÇÃO (admin) ============ -->
+    <dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+      <div class="confirm-inner">
+        <span class="confirm-icon" aria-hidden="true">!</span>
+        <h2 id="confirm-title">Confirmar ação</h2>
+        <p id="confirm-text"></p>
+        <div class="confirm-actions">
+          <button class="btn-ghost" type="button" id="confirm-cancel">Cancelar</button>
+          <button class="btn-danger" type="button" id="confirm-ok">Excluir partida</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon" id="toast-icon" aria-hidden="true">✓</span><span class="toast-msg" id="toast-msg"></span></div>
+  </body>
+</html>
